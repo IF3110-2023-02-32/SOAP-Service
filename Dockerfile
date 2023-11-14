@@ -1,14 +1,18 @@
-FROM maven:3.9-amazoncorretto-8 AS build
+# # BUILD DEPENDENCIES
+# FROM maven:3.9-amazoncorretto-8
 
-COPY . /app
-WORKDIR /app
+# COPY . /app
+# WORKDIR /app
 
-FROM amazoncorretto:8
+# RUN mvn clean package
 
-COPY --from=build ./app/target /app
+# ENVIRONMENT FOR JAVA
+FROM openjdk:8
+
+COPY ./target /app
 
 WORKDIR /app
 
 EXPOSE 3003
 
-CMD java -cp soap-service-1.0-SNAPSHOT-jar-with-dependencies.jar tubes.kicaumania.Main
+ENTRYPOINT ["java", "-jar", "soap-service-jar-with-dependencies.jar"]

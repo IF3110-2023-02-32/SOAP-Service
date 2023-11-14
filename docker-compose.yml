@@ -5,7 +5,7 @@ services:
     depends_on:
       - soap-db
     ports:
-      - 3303:${SOAP_SERVICE_PORT}
+      - 3003:${SOAP_SERVICE_PORT}
     env_file:
       - .env
     volumes:
