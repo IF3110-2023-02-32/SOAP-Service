@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+  soap-service:
+    image: soap-service
+    depends_on:
+      - soap-db
+    ports:
+      - 3303:${SOAP_SERVICE_PORT}
+    env_file:
+      - .env
+    volumes:
+      - ./src:/app/src
+  
+  soap-db:
+    image: mysql:8.2
+    container_name: ${SOAP_MYSQL_HOST}
+    environment:
+      MYSQL_ROOT_PASSWORD: ${SOAP_MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${SOAP_MYSQL_DATABASE}
+      MYSQL_USER: ${SOAP_MYSQL_USER}
+      MYSQL_PASSWORD: ${SOAP_MYSQL_PASSWORD}
+    ports:
+      - 3309:${SOAP_MYSQL_PORT}
