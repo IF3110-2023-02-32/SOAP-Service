@@ -13,17 +13,20 @@ public class APIKey {
     @PrimaryKey
     public Integer id;
     public String key;
+    public String client;
     public Timestamp timestamp;
 
     public APIKey() {
         this.id = 0;
         this.key = "";
+        this.client = "";
         this.timestamp = new Timestamp(System.currentTimeMillis());
     }
 
-    public APIKey(Integer id, String key, Timestamp timestamp) {
+    public APIKey(Integer id, String key, String client, Timestamp timestamp) {
         this.id = id;
         this.key = key;
+        this.client = client;
         this.timestamp = timestamp;
     }
 
@@ -174,5 +177,4 @@ public class APIKey {
             return 0;
         }
     }
-
 }
