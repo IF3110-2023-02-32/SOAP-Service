@@ -22,73 +22,52 @@ public class UnlockingEndpoint {
     @WebMethod
     public void requestUnlocking(
             @WebParam(name = "socmed_id") Integer socmed_id,
-            @WebParam(name = "dashboard_id") Integer dashboard_id,
             @WebParam(name = "link_code") String link_code) {
 
         String[] columns = { "socmed_id", "dashboard_id", "link_code" };
-        String[] values = { socmed_id.toString(), dashboard_id.toString(), link_code };
+        String[] values = { socmed_id.toString(), link_code };
         List<Unlocking> listOfUnlocking = Unlocking.findBy(columns, values);
         if (listOfUnlocking.size() > 0) {
             return;
         }
         Unlocking unlocking = new Unlocking(
                 socmed_id,
-                dashboard_id,
+                null,
                 link_code);
-
-        String url = System.getenv("DASHBOARD_REST_URL") + "/public/admin/email";
-        String email = new Fetch(url).method("GET").send();
         Unlocking.insert(unlocking);
-        System.out.println("Unlocking request notification sent to " + email);
-        EmailUtil.sendEmail(email, "New Unlocking Request on Dashboard",
-                "Please check your inbox to approve or reject the Unlocking");
     }
 
     @WebMethod
-    public void acceptUnlocking(
+    @WebResult(name = "statusCode")
+    public int verifyUnlocking(
             @WebParam(name = "socmed_id") Integer socmed_id,
             @WebParam(name = "dashboard_id") Integer dashboard_id,
             @WebParam(name = "link_code") String link_code) {
-        Unlocking unlocking = new Unlocking(
-                socmed_id,
-                dashboard_id,
-                link_code);
-        Unlocking.update(unlocking);
-        boolean callbackSuccess = this.unlockingCallback(
-                new ArrayList<Unlocking>() {
-                    {
-                        add(unlocking);
-                    }
-                });
-        if (callbackSuccess) {
-            System.out.println("Callback success");
-        } else {
-            System.out.println("Callback failed");
-        }
-    }
 
-    @WebMethod
-    public void rejectUnlocking(
-            @WebParam(name = "socmed_id") Integer socmed_id,
-            @WebParam(name = "dashboard_id") Integer dashboard_id,
-            @WebParam(name = "link_code") String link_code) {
-        Unlocking unlocking = new Unlocking(
-                socmed_id,
-                dashboard_id,
-                link_code);
-        Unlocking.update(unlocking);
-        boolean callbackSuccess = this.unlockingCallback(
-                new ArrayList<Unlocking>() {
-                    {
-                        add(unlocking);
-                    }
-                });
-        if (callbackSuccess) {
-            System.out.println("Callback success");
+        String[] fields = { "link_code" };
+        String[] values = { link_code };
+        List<Unlocking> matchedResult = Unlocking.findBy(fields, values);
+        if (matchedResult == null) {
+            return 0;
         } else {
-            System.out.println("Callback failed");
+            Unlocking unlocking = new Unlocking(
+                    socmed_id,
+                    dashboard_id,
+                    link_code);
+            Unlocking.update(unlocking);
+            boolean callbackSuccess = this.unlockingCallback(
+                    new ArrayList<Unlocking>() {
+                        {
+                            add(unlocking);
+                        }
+                    });
+            if (callbackSuccess) {
+                System.out.println("Callback success");
+            } else {
+                System.out.println("Callback failed");
+            }
+            return 1;
         }
-
     }
 
     @WebMethod
