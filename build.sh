@@ -1,1 +1,1 @@
-mvn install package
+mvn clean install package

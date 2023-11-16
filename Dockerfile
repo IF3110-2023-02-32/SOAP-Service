@@ -1,18 +1,10 @@
-# # BUILD DEPENDENCIES
-# FROM maven:3.9-amazoncorretto-8
-
-# COPY . /app
-# WORKDIR /app
-
-# RUN mvn clean package
-
 # ENVIRONMENT FOR JAVA
 FROM openjdk:8
 
-COPY ./target /app
-
+# COPY ./target /app/target
+COPY ./start-soap.sh /app/start-soap.sh
 WORKDIR /app
 
 EXPOSE 3003
 
-ENTRYPOINT ["java", "-jar", "soap-service-jar-with-dependencies.jar"]
+ENTRYPOINT ["bash", "start-soap.sh"]
