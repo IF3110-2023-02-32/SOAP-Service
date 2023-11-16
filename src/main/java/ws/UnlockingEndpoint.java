@@ -117,6 +117,15 @@ public class UnlockingEndpoint {
         return Unlocking.findBy(fields, values);
     }
 
+    @WebMethod
+    @WebResult(name = "unlocking")
+    public List<Unlocking> getUnlockingByLinkCode(
+            @WebParam(name = "link_code") String link_code) {
+        String[] fields = { "link_code" };
+        String[] values = { link_code };
+        return Unlocking.findBy(fields, values);
+    }
+
     private boolean unlockingCallback(List<Unlocking> listOfUnlocking) {
         JSONArray request = new JSONArray();
         for (Unlocking unlocking : listOfUnlocking) {
