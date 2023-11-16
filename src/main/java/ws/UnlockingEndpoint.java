@@ -22,10 +22,11 @@ public class UnlockingEndpoint {
     @WebMethod
     public void requestUnlocking(
             @WebParam(name = "socmed_id") Integer socmed_id,
-            @WebParam(name = "dashboard_id") Integer dashboard_id) {
+            @WebParam(name = "dashboard_id") Integer dashboard_id,
+            @WebParam(name = "link_code") String link_code) {
 
-        String[] columns = { "socmed_id", "dashboard_id" };
-        String[] values = { socmed_id.toString(), dashboard_id.toString() };
+        String[] columns = { "socmed_id", "dashboard_id", "link_code" };
+        String[] values = { socmed_id.toString(), dashboard_id.toString(), link_code };
         List<Unlocking> listOfUnlocking = Unlocking.findBy(columns, values);
         if (listOfUnlocking.size() > 0) {
             return;
@@ -33,7 +34,7 @@ public class UnlockingEndpoint {
         Unlocking unlocking = new Unlocking(
                 socmed_id,
                 dashboard_id,
-                "AUTO_GENERATED");
+                link_code);
 
         String url = System.getenv("DASHBOARD_REST_URL") + "/public/admin/email";
         String email = new Fetch(url).method("GET").send();
@@ -46,11 +47,12 @@ public class UnlockingEndpoint {
     @WebMethod
     public void acceptUnlocking(
             @WebParam(name = "socmed_id") Integer socmed_id,
-            @WebParam(name = "dashboard_id") Integer dashboard_id) {
+            @WebParam(name = "dashboard_id") Integer dashboard_id,
+            @WebParam(name = "link_code") String link_code) {
         Unlocking unlocking = new Unlocking(
                 socmed_id,
                 dashboard_id,
-                "AUTO_GENERATED");
+                link_code);
         Unlocking.update(unlocking);
         boolean callbackSuccess = this.unlockingCallback(
                 new ArrayList<Unlocking>() {
@@ -68,11 +70,12 @@ public class UnlockingEndpoint {
     @WebMethod
     public void rejectUnlocking(
             @WebParam(name = "socmed_id") Integer socmed_id,
-            @WebParam(name = "dashboard_id") Integer dashboard_id) {
+            @WebParam(name = "dashboard_id") Integer dashboard_id,
+            @WebParam(name = "link_code") String link_code) {
         Unlocking unlocking = new Unlocking(
                 socmed_id,
                 dashboard_id,
-                "AUTO_GENERATED");
+                link_code);
         Unlocking.update(unlocking);
         boolean callbackSuccess = this.unlockingCallback(
                 new ArrayList<Unlocking>() {
@@ -98,8 +101,9 @@ public class UnlockingEndpoint {
     @WebResult(name = "unlocking")
     public Unlocking getSingleUnlocking(
             @WebParam(name = "socmed_id") Integer socmed_id,
-            @WebParam(name = "dashboard_id") Integer dashboard_id) {
-        String[] fields = { "socmed_id", "dashboard_id" };
+            @WebParam(name = "dashboard_id") Integer dashboard_id,
+            @WebParam(name = "link_code") String link_code) {
+        String[] fields = { "socmed_id", "dashboard_id", "link_code" };
         String[] values = { socmed_id.toString(), dashboard_id.toString() };
         return Unlocking.findBy(fields, values).get(0);
     }
