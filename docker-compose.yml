@@ -20,5 +20,8 @@ services:
       MYSQL_DATABASE: ${SOAP_MYSQL_DATABASE}
       MYSQL_USER: ${SOAP_MYSQL_USER}
       MYSQL_PASSWORD: ${SOAP_MYSQL_PASSWORD}
+    volumes:
+      # - ./data/db:/var/lib/mysql
+      - ./data/init/db/service_soap.sql:/docker-entrypoint-initdb.d/schema.sql:ro
     ports:
       - 3309:${SOAP_MYSQL_PORT}
