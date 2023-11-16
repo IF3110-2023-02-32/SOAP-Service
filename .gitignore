@@ -21,3 +21,6 @@ target/
 
 # environment
 .env
+
+# database
+/data/db
