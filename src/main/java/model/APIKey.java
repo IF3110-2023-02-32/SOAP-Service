@@ -1,10 +1,5 @@
 package model;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.util.List;
@@ -14,15 +9,23 @@ import java.lang.reflect.Field;
 import db.MySQLDatabase;
 import model.PrimaryKey;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class APIKey {
     @PrimaryKey
     public Integer id;
     public String key;
     public Timestamp timestamp;
+
+    public APIKey() {
+        this.id = 0;
+        this.key = "";
+        this.timestamp = new Timestamp(System.currentTimeMillis());
+    }
+
+    public APIKey(Integer id, String key, Timestamp timestamp) {
+        this.id = id;
+        this.key = key;
+        this.timestamp = timestamp;
+    }
 
     private static List<APIKey> from(ResultSet resultSet) {
         try {

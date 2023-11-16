@@ -1,10 +1,5 @@
 package model;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -13,15 +8,23 @@ import java.util.List;
 import db.MySQLDatabase;
 import model.PrimaryKey;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class Unlocking {
     @PrimaryKey
     public Integer socmed_id;
     public Integer dashboard_id;
     public String link_code;
+
+    public Unlocking() {
+        this.socmed_id = 0;
+        this.dashboard_id = 0;
+        this.link_code = "";
+    }
+
+    public Unlocking(Integer socmed_id, Integer dashboard_id, String link_code) {
+        this.socmed_id = socmed_id;
+        this.dashboard_id = dashboard_id;
+        this.link_code = link_code;
+    }
 
     private static List<Unlocking> from(ResultSet resultSet) {
         try {

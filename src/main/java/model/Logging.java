@@ -1,10 +1,5 @@
 package model;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.util.List;
@@ -14,10 +9,6 @@ import java.lang.reflect.Field;
 import db.MySQLDatabase;
 import model.PrimaryKey;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class Logging {
     @PrimaryKey
     public Integer id;
@@ -25,6 +16,22 @@ public class Logging {
     public String ip;
     public String endpoint;
     public Timestamp timestamp;
+
+    public Logging() {
+        this.id = 0;
+        this.description = "";
+        this.ip = "";
+        this.endpoint = "";
+        this.timestamp = new Timestamp(System.currentTimeMillis());
+    }
+
+    public Logging(Integer id, String description, String ip, String endpoint, Timestamp timestamp) {
+        this.id = id;
+        this.description = description;
+        this.ip = ip;
+        this.endpoint = endpoint;
+        this.timestamp = timestamp;
+    }
 
     private static List<Logging> from(ResultSet resultSet) {
         try {
