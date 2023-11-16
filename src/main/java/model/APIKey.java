@@ -9,53 +9,47 @@ import java.lang.reflect.Field;
 import db.MySQLDatabase;
 import model.PrimaryKey;
 
-public class Logging {
+public class APIKey {
     @PrimaryKey
     public Integer id;
-    public String description;
-    public String ip;
-    public String endpoint;
+    public String key;
     public Timestamp timestamp;
 
-    public Logging() {
+    public APIKey() {
         this.id = 0;
-        this.description = "";
-        this.ip = "";
-        this.endpoint = "";
+        this.key = "";
         this.timestamp = new Timestamp(System.currentTimeMillis());
     }
 
-    public Logging(Integer id, String description, String ip, String endpoint, Timestamp timestamp) {
+    public APIKey(Integer id, String key, Timestamp timestamp) {
         this.id = id;
-        this.description = description;
-        this.ip = ip;
-        this.endpoint = endpoint;
+        this.key = key;
         this.timestamp = timestamp;
     }
 
-    private static List<Logging> from(ResultSet resultSet) {
+    private static List<APIKey> from(ResultSet resultSet) {
         try {
-            Class<Logging> c = Logging.class;
+            Class<APIKey> c = APIKey.class;
 
-            List<Logging> listOfLogging = new ArrayList<Logging>();
+            List<APIKey> listOfAPIKey = new ArrayList<APIKey>();
             while (resultSet.next()) {
-                Logging instance = c.newInstance();
+                APIKey instance = c.newInstance();
                 for (Field field : c.getDeclaredFields()) {
                     field.setAccessible(true);
                     field.set(instance, resultSet.getObject(field.getName()));
                 }
-                listOfLogging.add(instance);
+                listOfAPIKey.add(instance);
             }
-            return listOfLogging;
+            return listOfAPIKey;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    public static List<Logging> findAll() {
+    public static List<APIKey> findAll() {
         try {
-            Class<Logging> c = Logging.class;
+            Class<APIKey> c = APIKey.class;
 
             String tableName = c.getSimpleName().toLowerCase();
             String query = "SELECT * FROM " + tableName;
@@ -67,23 +61,23 @@ public class Logging {
         }
     }
 
-    public static Logging findById(Integer id) {
+    public static APIKey findById(Integer id) {
         try {
-            Class<Logging> c = Logging.class;
+            Class<APIKey> c = APIKey.class;
 
             String tableName = c.getSimpleName().toLowerCase();
             String query = "SELECT * FROM " + tableName + " WHERE `id` = " + id;
             ResultSet resultSet = MySQLDatabase.getInstance().executeQuery(query);
-            return (Logging) from(resultSet).get(0);
+            return (APIKey) from(resultSet).get(0);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    public static List<Logging> findBy(String field, String value) {
+    public static List<APIKey> findBy(String field, String value) {
         try {
-            Class<Logging> c = Logging.class;
+            Class<APIKey> c = APIKey.class;
 
             String tableName = c.getSimpleName().toLowerCase();
             String query = "SELECT * FROM " + tableName + " WHERE `" + field + "` = '" + value + "'";
@@ -95,9 +89,9 @@ public class Logging {
         }
     }
 
-    public static int insert(Logging instance) {
+    public static int insert(APIKey instance) {
         try {
-            Class<Logging> c = Logging.class;
+            Class<APIKey> c = APIKey.class;
 
             String tableName = c.getSimpleName().toLowerCase();
             String query = "INSERT INTO " + tableName + " (";
@@ -122,9 +116,9 @@ public class Logging {
         }
     }
 
-    public static int update(Logging instance) {
+    public static int update(APIKey instance) {
         try {
-            Class<Logging> c = Logging.class;
+            Class<APIKey> c = APIKey.class;
 
             String tableName = c.getSimpleName().toLowerCase();
             String query = "UPDATE " + tableName + " SET ";
@@ -156,9 +150,9 @@ public class Logging {
         }
     }
 
-    public static int delete(Logging instance) {
+    public static int delete(APIKey instance) {
         try {
-            Class<Logging> c = Logging.class;
+            Class<APIKey> c = APIKey.class;
 
             String tableName = c.getSimpleName().toLowerCase();
             String query = "DELETE FROM " + tableName + " WHERE ";
@@ -180,4 +174,5 @@ public class Logging {
             return 0;
         }
     }
+
 }

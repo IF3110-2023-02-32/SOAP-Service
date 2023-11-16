@@ -1,7 +1,9 @@
 package db;
 
+import java.sql.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import utils.ConfigHandler;
@@ -43,8 +45,31 @@ public class MySQLDatabase implements Database {
         return instance;
     }
 
-    protected void finalize () throws SQLException {
+    protected void finalize() throws SQLException {
         this.con.close();
     }
 
+    @Override
+    public ResultSet executeQuery(String query) {
+        System.out.println(query);
+        try {
+            Statement statement = getConnection().createStatement();
+            return statement.executeQuery(query + ";");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public int executeUpdate(String query) {
+        System.out.println(query);
+        try {
+            Statement statement = getConnection().createStatement();
+            return statement.executeUpdate(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
 }

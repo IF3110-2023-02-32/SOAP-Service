@@ -1,61 +1,54 @@
 package model;
 
-import java.sql.ResultSet;
-import java.sql.Timestamp;
-import java.util.List;
-import java.util.ArrayList;
 import java.lang.reflect.Field;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import db.MySQLDatabase;
 import model.PrimaryKey;
 
-public class Logging {
+public class Unlocking {
     @PrimaryKey
-    public Integer id;
-    public String description;
-    public String ip;
-    public String endpoint;
-    public Timestamp timestamp;
+    public Integer socmed_id;
+    public Integer dashboard_id;
+    public String link_code;
 
-    public Logging() {
-        this.id = 0;
-        this.description = "";
-        this.ip = "";
-        this.endpoint = "";
-        this.timestamp = new Timestamp(System.currentTimeMillis());
+    public Unlocking() {
+        this.socmed_id = 0;
+        this.dashboard_id = 0;
+        this.link_code = "";
     }
 
-    public Logging(Integer id, String description, String ip, String endpoint, Timestamp timestamp) {
-        this.id = id;
-        this.description = description;
-        this.ip = ip;
-        this.endpoint = endpoint;
-        this.timestamp = timestamp;
+    public Unlocking(Integer socmed_id, Integer dashboard_id, String link_code) {
+        this.socmed_id = socmed_id;
+        this.dashboard_id = dashboard_id;
+        this.link_code = link_code;
     }
 
-    private static List<Logging> from(ResultSet resultSet) {
+    private static List<Unlocking> from(ResultSet resultSet) {
         try {
-            Class<Logging> c = Logging.class;
+            Class<Unlocking> c = Unlocking.class;
 
-            List<Logging> listOfLogging = new ArrayList<Logging>();
+            List<Unlocking> listOfUnlocking = new ArrayList<Unlocking>();
             while (resultSet.next()) {
-                Logging instance = c.newInstance();
+                Unlocking instance = c.newInstance();
                 for (Field field : c.getDeclaredFields()) {
                     field.setAccessible(true);
                     field.set(instance, resultSet.getObject(field.getName()));
                 }
-                listOfLogging.add(instance);
+                listOfUnlocking.add(instance);
             }
-            return listOfLogging;
+            return listOfUnlocking;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    public static List<Logging> findAll() {
+    public static List<Unlocking> findAll() {
         try {
-            Class<Logging> c = Logging.class;
+            Class<Unlocking> c = Unlocking.class;
 
             String tableName = c.getSimpleName().toLowerCase();
             String query = "SELECT * FROM " + tableName;
@@ -67,26 +60,32 @@ public class Logging {
         }
     }
 
-    public static Logging findById(Integer id) {
+    public static Unlocking findById(Integer id) {
         try {
-            Class<Logging> c = Logging.class;
+            Class<Unlocking> c = Unlocking.class;
 
             String tableName = c.getSimpleName().toLowerCase();
             String query = "SELECT * FROM " + tableName + " WHERE `id` = " + id;
             ResultSet resultSet = MySQLDatabase.getInstance().executeQuery(query);
-            return (Logging) from(resultSet).get(0);
+            return (Unlocking) from(resultSet).get(0);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    public static List<Logging> findBy(String field, String value) {
+    public static List<Unlocking> findBy(String[] fields, String[] values) {
         try {
-            Class<Logging> c = Logging.class;
+            Class<Unlocking> c = Unlocking.class;
 
             String tableName = c.getSimpleName().toLowerCase();
-            String query = "SELECT * FROM " + tableName + " WHERE `" + field + "` = '" + value + "'";
+            String query = "SELECT * FROM " + tableName + " WHERE ";
+            for (int i = 0; i < fields.length; i++) {
+                query += "`" + fields[i] + "` = '" + values[i] + "'";
+                if (i < fields.length - 1) {
+                    query += " AND ";
+                }
+            }
             ResultSet resultSet = MySQLDatabase.getInstance().executeQuery(query);
             return from(resultSet);
         } catch (Exception e) {
@@ -95,9 +94,9 @@ public class Logging {
         }
     }
 
-    public static int insert(Logging instance) {
+    public static int insert(Unlocking instance) {
         try {
-            Class<Logging> c = Logging.class;
+            Class<Unlocking> c = Unlocking.class;
 
             String tableName = c.getSimpleName().toLowerCase();
             String query = "INSERT INTO " + tableName + " (";
@@ -122,9 +121,9 @@ public class Logging {
         }
     }
 
-    public static int update(Logging instance) {
+    public static int update(Unlocking instance) {
         try {
-            Class<Logging> c = Logging.class;
+            Class<Unlocking> c = Unlocking.class;
 
             String tableName = c.getSimpleName().toLowerCase();
             String query = "UPDATE " + tableName + " SET ";
@@ -156,9 +155,9 @@ public class Logging {
         }
     }
 
-    public static int delete(Logging instance) {
+    public static int delete(Unlocking instance) {
         try {
-            Class<Logging> c = Logging.class;
+            Class<Unlocking> c = Unlocking.class;
 
             String tableName = c.getSimpleName().toLowerCase();
             String query = "DELETE FROM " + tableName + " WHERE ";
