@@ -8,9 +8,8 @@ import java.sql.SQLException;
 
 import utils.ConfigHandler;
 
-public class MySQLDatabase implements Database {
-    private static Database instance = null;
-    private Connection con;
+public class MySQLDatabase {
+    private static Connection connection;
 
     private static final String DB_URL_KEY = "db.url";
     private static final String DB_USER_KEY = "db.user";
@@ -24,33 +23,36 @@ public class MySQLDatabase implements Database {
             String pass = ch.get(DB_PASS_KEY);
             System.out.println("Trying to connect to database at " + url + " with user " + user + " and pass " + pass);
 
-            this.con = DriverManager.getConnection(url, user, pass);
+            connection = DriverManager.getConnection(url, user, pass);
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(1);
         }
     }
 
-    @Override
-    public Connection getConnection() {
-        System.out.println("Connection: " + this.con);
-        return this.con;
-    }
-
-    public static Database getInstance() {
-        if (instance == null) {
-            instance = new MySQLDatabase();
+    public static Connection getConnection() {
+        if (connection == null) {
+            try {
+                ConfigHandler ch = ConfigHandler.getInstance();
+                String url = ch.get(DB_URL_KEY);
+                String user = ch.get(DB_USER_KEY);
+                String pass = ch.get(DB_PASS_KEY);
+                System.out.println(
+                        "Trying to connect to database at " + url + " with user " + user + " and pass " + pass);
+                connection = DriverManager.getConnection(url, user, pass);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-
-        return instance;
+        System.out.println("Connection: " + connection);
+        return connection;
     }
 
     protected void finalize() throws SQLException {
-        this.con.close();
+        connection.close();
     }
 
-    @Override
-    public ResultSet executeQuery(String query) {
+    public static ResultSet executeQuery(String query) {
         System.out.println(query);
         try {
             Statement statement = getConnection().createStatement();
@@ -61,8 +63,7 @@ public class MySQLDatabase implements Database {
         }
     }
 
-    @Override
-    public int executeUpdate(String query) {
+    public static int executeUpdate(String query) {
         System.out.println(query);
         try {
             Statement statement = getConnection().createStatement();

@@ -52,7 +52,7 @@ public class Unlocking {
 
             String tableName = c.getSimpleName().toLowerCase();
             String query = "SELECT * FROM " + tableName;
-            ResultSet resultSet = MySQLDatabase.getInstance().executeQuery(query);
+            ResultSet resultSet = MySQLDatabase.executeQuery(query);
             return from(resultSet);
         } catch (Exception e) {
             e.printStackTrace();
@@ -66,7 +66,7 @@ public class Unlocking {
 
             String tableName = c.getSimpleName().toLowerCase();
             String query = "SELECT * FROM " + tableName + " WHERE `id` = " + id;
-            ResultSet resultSet = MySQLDatabase.getInstance().executeQuery(query);
+            ResultSet resultSet = MySQLDatabase.executeQuery(query);
             return (Unlocking) from(resultSet).get(0);
         } catch (Exception e) {
             e.printStackTrace();
@@ -86,7 +86,7 @@ public class Unlocking {
                     query += " AND ";
                 }
             }
-            ResultSet resultSet = MySQLDatabase.getInstance().executeQuery(query);
+            ResultSet resultSet = MySQLDatabase.executeQuery(query);
             return from(resultSet);
         } catch (Exception e) {
             e.printStackTrace();
@@ -114,7 +114,7 @@ public class Unlocking {
                 }
             }
             query = query.substring(0, query.length() - 2) + ")";
-            return MySQLDatabase.getInstance().executeUpdate(query);
+            return MySQLDatabase.executeUpdate(query);
         } catch (Exception e) {
             e.printStackTrace();
             return 0;
@@ -148,7 +148,7 @@ public class Unlocking {
                     query += "`" + field.getName() + "` = '" + field.get(instance) + "'";
                 }
             }
-            return MySQLDatabase.getInstance().executeUpdate(query);
+            return MySQLDatabase.executeUpdate(query);
         } catch (Exception e) {
             e.printStackTrace();
             return 0;
@@ -173,7 +173,7 @@ public class Unlocking {
                     query += "`" + field.getName() + "` = '" + field.get(instance) + "'";
                 }
             }
-            return MySQLDatabase.getInstance().executeUpdate(query);
+            return MySQLDatabase.executeUpdate(query);
         } catch (Exception e) {
             e.printStackTrace();
             return 0;
