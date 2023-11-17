@@ -36,6 +36,37 @@ public class UnlockingEndpoint {
                 link_code);
         Unlocking.insertUnlocked(unlocking);
     }
+    
+    @WebMethod
+    @WebResult(name = "statusCode")
+    public int verifyRESTUnlocking(
+            @WebParam(name = "link_code") String link_code,
+            @WebParam(name = "dashboard_id") Integer dashboard_id) {
+
+        String[] fields = { "link_code" };
+        String[] values = { link_code };
+        List<Unlocking> matchedResult = Unlocking.findBy(fields, values);
+        if (matchedResult == null) {
+            return 0;
+        } else {
+            Unlocking unlocking = new Unlocking(
+                    link_code,
+                    dashboard_id);
+            Unlocking.updateFromREST(unlocking);
+            boolean callbackSuccess = this.unlockingCallback(
+                    new ArrayList<Unlocking>() {
+                        {
+                            add(unlocking);
+                        }
+                    });
+            if (callbackSuccess) {
+                System.out.println("Callback success");
+            } else {
+                System.out.println("Callback failed");
+            }
+            return 1;
+        }
+    }
 
     @WebMethod
     @WebResult(name = "statusCode")
