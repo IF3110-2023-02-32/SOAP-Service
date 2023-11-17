@@ -30,6 +30,11 @@ public class Unlocking {
         this.socmed_id = socmed_id;
         this.link_code = link_code;
     }
+    
+    public Unlocking(String link_code, Integer dashboard_id) {
+        this.dashboard_id = dashboard_id;
+        this.link_code = link_code;
+    }
 
     private static List<Unlocking> from(ResultSet resultSet) {
         try {
@@ -137,6 +142,21 @@ public class Unlocking {
                 }
             }
             query = query.substring(0, query.length() - 2) + ")";
+            return MySQLDatabase.getInstance().executeUpdate(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    public static int updateFromREST(Unlocking instance) {
+        try {
+            Class<Unlocking> c = Unlocking.class;
+
+            String tableName = c.getSimpleName().toLowerCase();
+            String query = "UPDATE " + tableName + " SET ";
+            query += "dashboard_id = '" + instance.dashboard_id + "'";
+            query += "`link_code` = " + instance.link_code;
             return MySQLDatabase.getInstance().executeUpdate(query);
         } catch (Exception e) {
             e.printStackTrace();
