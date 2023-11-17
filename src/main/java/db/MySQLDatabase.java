@@ -26,9 +26,12 @@ public class MySQLDatabase implements Database {
 
             this.con = DriverManager.getConnection(url, user, pass);
         } catch (Exception e) {
+            System.out.println("connect to db failed");
             e.printStackTrace();
             System.exit(1);
         }
+
+        System.out.println("Successfully connected to database");
     }
 
     @Override
