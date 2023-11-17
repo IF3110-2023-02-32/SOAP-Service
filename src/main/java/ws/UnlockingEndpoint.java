@@ -24,12 +24,12 @@ public class UnlockingEndpoint {
             @WebParam(name = "socmed_id") Integer socmed_id,
             @WebParam(name = "link_code") String link_code) {
 
-        String[] columns = { "socmed_id", "dashboard_id", "link_code" };
-        String[] values = { socmed_id.toString(), link_code };
-        List<Unlocking> listOfUnlocking = Unlocking.findBy(columns, values);
-        if (listOfUnlocking.size() > 0) {
-            return;
-        }
+        // String[] columns = { "socmed_id", "dashboard_id", "link_code" };
+        // String[] values = { socmed_id.toString(), null, link_code };
+        // List<Unlocking> listOfUnlocking = Unlocking.findBy(columns, values);
+        // if (listOfUnlocking.size() > 0) {
+        //     return;
+        // }
         Unlocking unlocking = new Unlocking(
                 socmed_id,
                 null,
