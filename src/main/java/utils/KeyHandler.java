@@ -57,7 +57,7 @@ public class KeyHandler implements SOAPHandler<SOAPMessageContext> {
             if (httpHeaders.containsKey("Authorization")) {
                 String authHeader = (String) httpHeaders.get("Authorization").get(0);
 
-                String token = authHeader.split(" ")[1];
+                String token = authHeader.split(" ")[0];
                 List<APIKey> apiKey = APIKey.findBy("key", token);
                 if (apiKey.size() > 0) {
                     return true;
