@@ -26,6 +26,11 @@ public class Unlocking {
         this.link_code = link_code;
     }
 
+    public Unlocking(Integer socmed_id, String link_code) {
+        this.socmed_id = socmed_id;
+        this.link_code = link_code;
+    }
+
     private static List<Unlocking> from(ResultSet resultSet) {
         try {
             Class<Unlocking> c = Unlocking.class;
@@ -91,6 +96,24 @@ public class Unlocking {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public static int insertUnlocked(Unlocking instance) {
+        try {
+            Class<Unlocking> c = Unlocking.class;
+
+            String tableName = c.getSimpleName().toLowerCase();
+            String query = "INSERT INTO " + tableName + " (";
+            query += "socmed_id, link_code";
+            query += ") VALUES (";
+            query += "'" + instance.socmed_id + "', ";
+            query += "'" + instance.link_code + "' ";
+            query += ")";
+            return MySQLDatabase.getInstance().executeUpdate(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
         }
     }
 

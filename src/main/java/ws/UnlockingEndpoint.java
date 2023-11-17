@@ -30,11 +30,11 @@ public class UnlockingEndpoint {
         // if (listOfUnlocking.size() > 0) {
         //     return;
         // }
+        System.out.println("unlocked user with socmed_id = " + socmed_id + ", link_code = " + link_code);
         Unlocking unlocking = new Unlocking(
                 socmed_id,
-                null,
                 link_code);
-        Unlocking.insert(unlocking);
+        Unlocking.insertUnlocked(unlocking);
     }
 
     @WebMethod
